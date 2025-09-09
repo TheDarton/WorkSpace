@@ -1,118 +1,44 @@
-
-// -------- Constants --------
-const UPDATES_KEY = "AH_UPDATES_V1";
-
-// -------- Internal Utils --------
-function nowISO(){ return new Date().toISOString(); }
-function norm(s){ return String(s||"").trim(); }
-
-function readAll(){
-  try { return JSON.parse(localStorage.getItem(UPDATES_KEY) || "[]"); } catch { return []; }
-}
-function writeAll(arr){
-  localStorage.setItem(UPDATES_KEY, JSON.stringify(arr));
-}
-function genId(){
-  return "upd_" + Math.random().toString(36).slice(2,10) + Date.now().toString(36);
-}
-
-// -------- Core (new) API --------
-export function createUpdate({ text = "", imageUrl = "" }, session){
-  if(!session || session.role !== "admin") return { ok:false, reason:"Forbidden" };
-  if(!session.country) return { ok:false, reason:"No session country" };
-  text = norm(text);
-  imageUrl = norm(imageUrl);
-  if(!text && !imageUrl) return { ok:false, reason:"Add text or image" };
-
-  const upd = {
-    id: genId(),
-    country: session.country,
-    text,
-    imageUrl,
-    status: "approved",
-    createdAt: nowISO(),
-    createdBy: { loginId: session.loginId }
-  };
-  const list = readAll();
-  list.unshift(upd);            // в начало
-  writeAll(list);
-  return { ok:true, update: upd };
-}
-
-export function deleteUpdate(id, session){
-  if(!session || session.role !== "admin") return { ok:false, reason:"Forbidden" };
-  const list = readAll();
-  const idx = list.findIndex(u => u.id === id && u.country === session.country);
-  if(idx === -1) return { ok:false, reason:"Not found" };
-  list.splice(idx,1);
-  writeAll(list);
-  return { ok:true };
-}
-
-// -------- Country-scoped list --------
-export function listCountryUpdates(session){
-  if(!session?.country) return [];
-  return readAll()
-    .filter(u => u.country === session.country && u.status === "approved")
-    .sort((a,b)=> b.createdAt.localeCompare(a.createdAt));
-}
-
-// ========== Backward Compatibility Layer ==========
-// Старый код вызывал addUpdate(session,{text}) и listUpdates(session)
-
-export function addUpdate(session, { text = "" }) {
-  // адаптер к createUpdate
-  return createUpdate({ text }, session);
-}
-
-export function listUpdates(session){
-  return listCountryUpdates(session);
-}
-
-// -------- Last-read counters (как в ранней версии) --------
-function lastReadKey(login, country){
-  return `AH_UPDATES_LASTREAD_V1_${login}_${country}`;
-}
-
-export function getLastRead(session){
-  if(!session?.loginId || !session.country) return null;
-  try { return localStorage.getItem(lastReadKey(session.loginId, session.country)); } catch { return null; }
-}
-
-export function markAllRead(session){
-  if(!session?.loginId || !session.country) return;
-  try { localStorage.setItem(lastReadKey(session.loginId, session.country), nowISO()); } catch {}
-}
-
-export function getUnreadCount(session){
-  if(!session?.country) return 0;
-  const last = getLastRead(session);
-  const ups = listCountryUpdates(session);
-  if(!last) return ups.length;
-  return ups.filter(u => u.createdAt > last).length;
-}
-
-// -------- Optional helper (CSV export by month) --------
-// Месяц формата YYYY-MM (например 2025-09)
-export function exportUpdatesCsv(session, month){
-  if(!session?.country) return { ok:false, reason:"No session country" };
-  const rows = listCountryUpdates(session)
-    .filter(u => !month || (u.createdAt.slice(0,7) === month));
-  const headers = ["id","createdAt","country","text","imageUrl","createdBy"];
-  const lines = [
-    headers.join(","),
-    ...rows.map(u => headers.map(h=>{
-      const val = h==="createdBy" ? (u.createdBy?.loginId||"") : (u[h]||"");
-      return `"${String(val).replace(/"/g,'""')}"`;
-    }).join(","))
-  ];
-  return { ok:true, csv: lines.join("\n") };
-}
-
-// -------- (Заглушки для будущего ack поштучно) --------
-// Если захотите вернуть ACK каждого обновления (галочка):
-// - Добавить отдельное хранилище acks
-// - Дописать функции isAcked(updateId, loginId) и markAck(updateId, loginId)
-// Сейчас всё реализовано через lastRead (странично)
-
-// Конец файл
+const STORE_KEY="AH_UPDATES_V2";
+const ACK_KEY="AH_UPDATES_ACKMAP_V1";
+const SCHEMA_VERSION=2;
+function iso(){return new Date().toISOString();}
+function genId(){if(typeof crypto!=="undefined"&&crypto.randomUUID)return crypto.randomUUID();return"upd_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
+function norm(v){return String(v||"").trim();}
+function parse(j,f){try{return JSON.parse(j);}catch{return f;}}
+function loadStore(){const raw=localStorage.getItem(STORE_KEY);if(!raw)return null;return parse(raw,null);}
+function saveStore(o){localStorage.setItem(STORE_KEY,JSON.stringify(o));notify();}
+function initStore(){let st=loadStore();if(!st){st={schemaVersion:SCHEMA_VERSION,updates:[]};saveStore(st);}return st;}
+function ensure(){const st=loadStore();if(!st||st.schemaVersion!==SCHEMA_VERSION)initStore();}
+function readUpdates(){ensure();return loadStore().updates;}
+function writeUpdates(arr){saveStore({schemaVersion:SCHEMA_VERSION,updates:arr});}
+function loadAcks(){return parse(localStorage.getItem(ACK_KEY),{acks:{}});}
+function saveAcks(a){localStorage.setItem(ACK_KEY,JSON.stringify(a));notify();}
+function sanitizeHtml(html){if(!html)return"";const tmp=document.createElement("div");tmp.innerHTML=html;const allowed=new Set(["B","I","U","STRONG","EM","BR"]);(function walk(n){const ch=[...n.childNodes];for(const c of ch){if(c.nodeType===1){if(!allowed.has(c.tagName)){const f=document.createDocumentFragment();while(c.firstChild)f.appendChild(c.firstChild);c.replaceWith(f);walk(f);}else{walk(c);}}}})(tmp);return tmp.innerHTML.trim();}
+function canCreate(s){return s&&(s.role==="admin"||s.role==="operation")&&s.country;}
+function canApprove(s){return s&&s.role==="admin";}
+function canAckSelf(s){return s&&s.role==="sm";}
+function canAckOther(s){return s&&(s.role==="admin"||s.role==="operation");}
+function createUpdate(params,session){if(!canCreate(session))return{ok:false,reason:"forbidden"};let html=params.html!=null?params.html:(params.text||"");html=sanitizeHtml(html);const imageUrl=norm(params.imageUrl||"");if(!html&&!imageUrl)return{ok:false,reason:"empty"};const status=session.role==="admin"?"approved":"pending";const upd={id:genId(),country:session.country,html,imageUrl,status,createdAt:iso(),createdBy:{loginId:session.loginId,role:session.role}};if(status==="approved"){upd.approvedAt=upd.createdAt;upd.approvedBy={loginId:session.loginId};}const list=readUpdates();list.unshift(upd);writeUpdates(list);return{ok:true,update:upd};}
+function editUpdate(idVal,changes,session){const list=readUpdates();const idx=list.findIndex(u=>u.id===idVal);if(idx===-1)return{ok:false,reason:"not_found"};const upd=list[idx];if(session.country!==upd.country)return{ok:false,reason:"country_mismatch"};const ownPending=session.role==="operation"&&upd.createdBy.loginId===session.loginId&&upd.status==="pending";if(!(session.role==="admin"||ownPending))return{ok:false,reason:"forbidden"};if(changes.html!=null||changes.text!=null){const newHtml=sanitizeHtml(changes.html!=null?changes.html:changes.text);upd.html=newHtml;}if(changes.imageUrl!==undefined)upd.imageUrl=norm(changes.imageUrl);if(session.role==="admin"&&changes.status&&["pending","approved","archived"].includes(changes.status)){if(changes.status==="approved"&&upd.status!=="approved"){upd.approvedAt=iso();upd.approvedBy={loginId:session.loginId};}upd.status=changes.status;}upd.updatedAt=iso();upd.updatedBy={loginId:session.loginId};list[idx]=upd;writeUpdates(list);return{ok:true,update:upd};}
+function approveUpdate(idVal,session){if(!canApprove(session))return{ok:false,reason:"forbidden"};const list=readUpdates();const idx=list.findIndex(u=>u.id===idVal);if(idx===-1)return{ok:false,reason:"not_found"};const upd=list[idx];if(upd.status!=="approved"){upd.status="approved";upd.approvedAt=iso();upd.approvedBy={loginId:session.loginId};upd.updatedAt=iso();upd.updatedBy={loginId:session.loginId};list[idx]=upd;writeUpdates(list);}return{ok:true,update:upd};}
+function deleteUpdate(idVal,session){const list=readUpdates();const idx=list.findIndex(u=>u.id===idVal);if(idx===-1)return{ok:false,reason:"not_found"};const upd=list[idx];const ownPending=session.role==="operation"&&upd.createdBy.loginId===session.loginId&&upd.status==="pending";if(!(session.role==="admin"||ownPending))return{ok:false,reason:"forbidden"};list.splice(idx,1);writeUpdates(list);removeAcksForUpdate(idVal);return{ok:true};}
+function removeAcksForUpdate(updateId){const a=loadAcks();if(a.acks[updateId]){delete a.acks[updateId];saveAcks(a);}}
+function listUpdates(session,opts={}){if(!session||!session.country)return[];const {includePending=false,includeArchived=false}=opts;const all=readUpdates().filter(u=>u.country===session.country);if(session.role==="admin")return all;if(session.role==="operation"){return all.filter(u=>{if(u.status==="approved")return true;if(includePending&&u.status==="pending")return true;if(includeArchived&&u.status==="archived")return true;if(u.createdBy.loginId===session.loginId&&u.status==="pending")return true;return false;});}if(session.role==="sm")return all.filter(u=>u.status==="approved");return[];}
+function listApproved(session){return listUpdates(session).filter(u=>u.status==="approved");}
+function listCountryUpdates(session){return listUpdates(session);}
+function getPendingCount(session){if(!session)return 0;return listUpdates(session,{includePending:true}).filter(u=>u.status==="pending").length;}
+function acknowledgeUpdate(session,updateId,targetSm){const upd=listUpdates(session,{includePending:true,includeArchived:true}).find(u=>u.id===updateId);if(!upd||upd.status!=="approved")return{ok:false,reason:"not_allowed"};let smLogin;if(canAckSelf(session)&&!targetSm)smLogin=session.loginId;else if(canAckOther(session)&&targetSm)smLogin=targetSm;else if(canAckOther(session)&&!targetSm)smLogin=session.loginId;else return{ok:false,reason:"forbidden"};const a=loadAcks();if(!a.acks[updateId])a.acks[updateId]={};a.acks[updateId][smLogin]={at:iso(),source:smLogin===session.loginId?"self":session.role,markedBy:session.loginId};saveAcks(a);return{ok:true,ack:a.acks[updateId][smLogin]};}
+function isAcknowledged(updateId,smLogin){const a=loadAcks();return!!(a.acks[updateId]&&a.acks[updateId][smLogin]);}
+function getUpdateAcks(updateId){const a=loadAcks();return a.acks[updateId]||{};}
+function getAckMatrix(session,smLogins){const ups=listApproved(session);return ups.map(u=>{const am=getUpdateAcks(u.id);const row={update:u,acks:{}};smLogins.forEach(l=>{row.acks[l]=am[l]||null;});return row;});}
+function exportCsv(session){const ups=listUpdates(session,{includePending:true,includeArchived:true});const headers=["id","status","country","createdAt","approvedAt","createdBy","html","imageUrl"];const lines=[headers.join(",")];ups.forEach(u=>{const row=headers.map(h=>{let v="";if(h==="createdBy")v=(u.createdBy&&u.createdBy.loginId)||"";else v=u[h]||"";return'"'+String(v).replace(/"/g,'""')+'"';}).join(",");lines.push(row);});return{ok:true,csv:lines.join("\n")};}
+function getLastRead(session){if(!session||!session.loginId||!session.country)return null;try{return localStorage.getItem("AH_UPDATES_LASTREAD_V1_"+session.loginId+"_"+session.country);}catch{return null}}
+function markAllRead(session){if(!session||!session.loginId||!session.country)return;try{localStorage.setItem("AH_UPDATES_LASTREAD_V1_"+session.loginId+"_"+session.country,iso());}catch{}}
+function getUnreadCount(session){if(!session||!session.country)return 0;const last=getLastRead(session);const ups=listUpdates(session);if(!last)return ups.length;return ups.filter(u=>u.createdAt>last).length;}
+function exportUpdatesCsv(session,month){if(!session||!session.country)return{ok:false,reason:"No country"};const rows=listCountryUpdates(session).filter(u=>!month||u.createdAt.slice(0,7)===month);const headers=["id","createdAt","country","html","imageUrl","createdBy"];const lines=[headers.join(","),...rows.map(u=>headers.map(h=>{const val=h==="createdBy"?(u.createdBy&&u.createdBy.loginId)||"":u[h]||"";return'"'+String(val).replace(/"/g,'""')+'"';}).join(","))];return{ok:true,csv:lines.join("\n")};}
+function addUpdate(session,{text="",imageUrl=""}){return createUpdate({text,html:text,imageUrl},session);}
+const subs=new Set();
+function subscribe(fn){if(typeof fn==="function"){subs.add(fn);return()=>subs.delete(fn);}return()=>{}}
+function notify(){subs.forEach(f=>{try{f();}catch{}})}
+window.addEventListener("storage",e=>{if(e.key===STORE_KEY||e.key===ACK_KEY)notify();});
+export {createUpdate,editUpdate,approveUpdate,deleteUpdate,listUpdates,listApproved,listCountryUpdates,getPendingCount,acknowledgeUpdate,isAcknowledged,getUpdateAcks,getAckMatrix,exportCsv,addUpdate,getLastRead,markAllRead,getUnreadCount,exportUpdatesCsv,subscribe};
