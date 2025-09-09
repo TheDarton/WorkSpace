@@ -1,0 +1,31 @@
+.upd-board{display:flex;flex-direction:column;gap:16px}
+.upd-editor-box{display:flex;flex-direction:column;gap:8px;max-width:700px;padding:12px;border:1px solid #333;border-radius:8px;background:#111}
+.upd-toolbar{display:flex;gap:6px}
+.upd-toolbar button{background:#222;color:#ddd;border:1px solid #444;padding:4px 8px;font-size:12px;cursor:pointer}
+.upd-toolbar button:hover{background:#333}
+#updEditor{min-height:120px;border:1px solid #444;padding:8px;background:#000;color:#eee;overflow:auto}
+#updEditor:focus{outline:1px solid #666}
+.upd-img-input{display:flex;align-items:center;gap:10px}
+.upd-img-preview{max-height:90px;max-width:160px;cursor:pointer;border:1px solid #444;display:none}
+.upd-table-wrap{overflow:auto}
+.upd-table{border-collapse:collapse;width:100%;min-width:950px}
+.upd-table th,.upd-table td{border:1px solid #333;padding:6px;vertical-align:top;font-size:12px}
+.upd-table th{background:#1e1e1e;position:sticky;top:0;z-index:2}
+.upd-card{display:flex;flex-direction:column;gap:4px}
+.upd-meta{font-size:10px;opacity:.6}
+.upd-status{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;text-transform:uppercase;background:#555;color:#fff}
+.upd-status.pending{background:#d18a00}
+.upd-status.approved{background:#299d28}
+.upd-status.archived{background:#666}
+.upd-actions{display:flex;gap:4px;flex-wrap:wrap}
+.upd-actions button{padding:2px 6px;font-size:11px;background:#222;border:1px solid #444;color:#eee;cursor:pointer}
+.upd-actions button:hover{background:#333}
+.upd-img-thumb{max-width:140px;max-height:100px;cursor:pointer;border:1px solid #555;border-radius:4px}
+.ack-cell{text-align:center;min-width:48px}
+.ack-btn{cursor:pointer;font-size:18px;line-height:1}
+.ack-yes{color:#1fa672}
+.ack-no{color:#666}
+.status-pending td{background:rgba(209,138,0,0.07)}
+.status-archived td{opacity:.55}
+.upd-fullscreen{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9999}
+.upd-fullscreen img{max-width:90%;max-height:90%;border:2px solid #fff;box-shadow:0 0 20px #000}
