@@ -1,14 +1,3 @@
-// updates.js — Country-scoped Updates
-// Только admin: создаёт обновления (status="approved").
-// SM и (при желании) Operation читают. Dealer не видит.
-// ВОССТАНОВЛЕНЫ старые функции: addUpdate, listUpdates, getUnreadCount, markAllRead, getLastRead,
-// чтобы не ломать существующий app.js.
-//
-// Хранение:
-//  - Ключ AH_UPDATES_V1: массив объектов { id, country, text, imageUrl, status, createdAt, createdBy:{loginId} }
-//  - Ключ AH_UPDATES_LASTREAD_V1_<login>_<country>: ISO время последнего посещения раздела Updates (для бейджа "NEW"/счётчика)
-//
-// Если позже понадобится "pending/approved/rejected" или ack поштучно — можно расширить.
 
 // -------- Constants --------
 const UPDATES_KEY = "AH_UPDATES_V1";
