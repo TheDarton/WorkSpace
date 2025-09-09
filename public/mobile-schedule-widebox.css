@@ -1,0 +1,75 @@
+/* Мобильный режим: сам бокс месяца становится шире (по ширине контента),
+   а общий контейнер месяцев скроллится по горизонтали.
+   Плюс убираем лишний вертикальный «пустой» скролл. */
+
+@media (max-width: 640px) {
+  /* 1) Общий контейнер расписания — горизонтальный скролл */
+  #ss-wrap {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    padding-bottom: 2px; /* чтобы не прилипал к нижнему бордеру скроллбара (где есть) */
+  }
+
+  /* 2) Каждый месяц — ширина по содержимому (максимально широкая таблица) */
+  #ss-wrap > section {
+    width: max-content;           /* растягиваем бокс до ширины таблицы */
+    min-width: 100%;              /* но не уже экрана */
+    max-width: none !important;
+    overflow: visible !important; /* ничего не режем внутри */
+    margin-bottom: 16px;          /* нормальный зазор между месяцами */
+    border-radius: 12px;          /* оставим скругление как есть */
+  }
+
+  /* 3) Контент месяца — слегка уменьшаем боковые поля, чтобы вместить больше контента */
+  #ss-wrap [id^="content-"] {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    overflow: visible !important;
+  }
+
+  /* 4) Контейнеры самой таблицы. Можно оставить как есть, они не обязаны скроллиться сами,
+        т.к. весь бокс теперь шире и прокручивается родитель #ss-wrap */
+  #ss-wrap .overflow-x-auto,
+  #ss-wrap [data-autofit],
+  #ss-wrap .rounded-xl:has(> table),
+  .table-scroll {
+    overflow: visible !important; /* прокрутку по X даёт #ss-wrap */
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;      /* чтобы не обрезало по высоте */
+    min-height: 0 !important;
+  }
+
+  /* 5) Таблица — естественная ширина */
+  #ss-wrap .overflow-x-auto > table,
+  #ss-wrap [data-autofit] > table,
+  #ss-wrap .rounded-xl:has(> table) > table,
+  .table-scroll > table {
+    display: inline-table;
+    width: auto !important;
+    min-width: unset !important;
+    max-width: none !important;
+    transform: none !important;   /* никакого scale() */
+  }
+
+  /* 6) Отступ между «графиком» и «сводной» таблицами */
+  #ss-wrap [id^="content-"] > * + * {
+    margin-top: 12px !important;
+  }
+
+  /* 7) Убираем причины «бесконечной» вертикальной прокрутки */
+  html, body, main, #app, #ss-wrap {
+    overflow-y: auto !important;  /* нормальная вертикальная прокрутка */
+  }
+  /* На всякий случай снимаем принудительные большие высоты, если где-то они есть */
+  #ss-wrap *, #ss-wrap *::before, #ss-wrap *::after {
+    max-height: none !important;
+  }
+}

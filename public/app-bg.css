@@ -1,0 +1,12 @@
+/* Сплошной фон (тёмный). Можно заменить цвет в переменной. */
+:root { --bg-solid: #0e172a; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  color-scheme: dark;
+  background: var(--bg-solid) !important;
+}
+#app, main { background: transparent !important; }
+@media (max-width: 640px) {
+  body { background: var(--bg-solid) !important; }
+}

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=0.3, maximum-scale=6, user-scalable=yes, viewport-fit=cover"
+    />
+    <title>Amber-Studios Work Space</title>
+    <meta name="description" content="Amber-Studios Work Space: unified login и роль‑based интерфейс." />
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: { DEFAULT: "#0ea5e9", dark: "#0284c7" }
+            }
+          }
+        }
+      };
+    </script>
+
+    <style>
+      /* Скроллбар */
+      * { scrollbar-width: thin; scrollbar-color: rgba(148,163,184,0.35) transparent; }
+      *::-webkit-scrollbar { width: 8px; height: 8px; }
+      *::-webkit-scrollbar-track { background: transparent; }
+      *::-webkit-scrollbar-thumb {
+        background-color: rgba(148,163,184,0.35);
+        border-radius: 999px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+      }
+      *::-webkit-scrollbar-thumb:hover { background-color: rgba(148,163,184,0.5); }
+
+      html, body { touch-action: auto; }
+
+      /* Если вдруг старый header снова будет внедрён сторонним скриптом — принудительно скрываем */
+      header.old-legacy,
+      .legacy-topbar,
+      #legacy-topbar,
+      .amber-old-header {
+        display: none !important;
+      }
+    </style>
+
+    <link rel="stylesheet" href="./public/app-bg.css" />
+    <link rel="stylesheet" href="./public/mobile-schedule-widebox.css" />
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg" />
+  </head>
+
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <!-- Старый header (Amber — Shift Managers) удалён. 
+         Теперь всё рендерится внутри #app (сам header создаётся динамически в app.js). -->
+    <div id="app"></div>
+
+    <noscript>
+      <div class="px-4 py-3 text-sm text-rose-300">Пожалуйста включите JavaScript.</div>
+    </noscript>
+
+    <script type="module" src="./app.js"></script>
+    <!-- Если auth-boot больше не требуется, этот импорт можно удалить -->
+    <script type="module" src="./auth-boot.js"></script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+@odata.etag,ItemInternalId,Column1,Column2,Column3,Column4,Column5,Column6,Column7,Column8,Column9,Column10,Column11,Column12,Column13,Column14,Column15,Column16,Column17,Column18,Column19,Column20,Column21,Column22,Column23,Column24,Column25,Column26,Column27,Column28,Column29,Column30,Column31,Column32,Column33,Column34,Column35,Column36,Column37,Column38,Column39,Column40,Column41
+,9ee70453-7c27-4bad-8d98-64629e4cccda,September 2025,31,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,,,Shifts,,,,Total hours,,
+,cfe11094-78bf-4384-aee3-154d7e81c87c,,Sun,Mon,Tue,Wed,Thu,Fri,Sat,Sun,Mon,Tue,Wed,Thu,Fri,Sat,Sun,Mon,Tue,Wed,Thu,Fri,Sat,Sun,Mon,Tue,Wed,Thu,Fri,Sat,Sun,Mon,Tue,,,Total,On call,Days,Nights,Day,Night,Total
+,5f388bcc-5088-4f6d-8ef3-1cf08030b9ed,Aleksandra Arlamova,20F,20F,20F,,,20F,20F,20F,20F,20F,,X,X,X,/20F,20F,20F,,,08F!,20F,20F,20F,20F,,,,20F,20F,20F,,,,17,1,1,16,76,128,204
+,a79ab7f5-a34c-4d35-b010-e25559375ba0,Anastasija Šemjakina,V,V,V,08F,08F,,,08F,08F,08F,,,X,X,X,20F,20F,,20F,,,,,20F,20F,20F,,,20F,20F,20F,,,14,0,5,9,96,72,168
+,abd2ad56-d7d8-44e6-8499-1dfe657132db,Arina Jefimova,s08F,sX,s,,08F,08F,,,,08F,08F,08F,,,,08F,08F,08F,,,,08F,08F,08F,,,X,X,08F,08F,08F,,,14,0,14,0,168,0,168
+,2c79674d-f269-4cce-91a8-7c9d66def113,Diāna Bergmane-Šakele,20F,20F,,,08F,08F,,20F,,,,08F,20F,X,,,,08F,08F,08F,X,X,08F,08F,20F,,,08F,08F,,,,,14,0,10,4,136,32,168
+,70fc5f5f-22b4-4f19-9185-ffa5ff868ba3,Diāna Vavilova,X,08F,08F,X,,,08F,08F,,,08F,08F,V,V,V,V,V,V,V,V,V,V,V,V,V,V,,,08F,08F,,,,8,0,8,0,96,0,96
+,9a262b23-1e11-4a92-82be-f0bbd6819dc0,Jekaterīna Belogurova,V,,,X,X,X,08F,08F,,,08F,08F,08F,,,08F,,,08F,08F,08F,,,08F,08F,,,08F,08F,08F,,,,14,0,14,0,168,0,168
+,416e8e15-c1f6-4e78-8cde-f3f57a21e710,Jūlija Vavilova,,,,08F,20F,20F,X,X,08F!,,20F,20F,,,08F,V,V,V,V,V,V,V,V,V,V,V,V,V,V,20F,20F,,,9,1,3,6,60,48,108
+,49476b6f-8b64-40c4-905a-2a243af522c1,Ludmila Tumaševiča,V,,08F,X,08F!,08F,08F,X,,08F,08F,,,08F,,,08F,08F,,,08F!,08F,08F,,,08F,08F,,,08F,08F,,,16,2,16,0,192,0,192
+,a64060b5-43da-44e5-bae9-4a20fc784643,Rita Borisova,X,X,08F,08F,,08F,X,X,08F,08F,,,08F,08F,20F,,,,,08F,08F,20F,,,,,08F,08F,20F,,,,,14,0,11,3,144,24,168
+,138f1a13-a1ca-4358-8ad9-6ca798f8b1bb,Tamara Karmazjuka,X,08F,20F,20F,,,,08F,20F,20F,,,,20F,20F,,,20F,20F,,,08F,20F,20F,,20F,,X,X,X,,,,14,0,3,11,80,88,168
+,e45cd2ea-f195-4ab5-aa11-00920d525571,Valeriia Pospeshylova,,08F,08F,20F,20F,,X,,,,20F,20F,20F,,X,,,08F,08F,20F,20F,,,,,08F,20F,20F,,,,,,14,0,5,9,96,72,168
+,b908c512-33c8-4752-9890-bb129d28168d,Viola Daugule-Smiķerste,,,,20F,20F,,20F,,,20F,20F,,,20F,X,X,20F,20F,,,20F,,20F,20F,20F,,,20F,20F,20F,,,,15,0,0,15,60,120,180
+,a013eadc-ec9b-48e1-9077-bbdbb814d71c,Jūlija Tiško,,X,X,,/08F,08F,/14F,/14F,,,,,08F,08F,08F,20F,,,,,08F,/08F,08F,20F,,,,,/08F,08F,20F,,,10,0,7,3,96,24,120
+,97129ffe-b8e4-4850-be4f-24cf7e9899a9,Artjoms Švilpe,,,,08F,20F,,X,X,08F,/20F,,,20F,20F,20F,,08F,X,08F,08F,,20F,,08F!,08F,,08F,08F,,,08F,,,15,1,10,5,140,40,180
+,789d074c-7510-4bff-8b4d-cf6b3f499909,Daniils Šutovs,08F!,,08F,08F,08F,X,X,X,20F,20F,,,,08F,08F,08F,,,08F,20F,20F,,,,08F,08F,08F,,,,,,,14,0,10,4,136,32,168
+,8dd24fea-2390-486f-adec-2e9690e6a101,Deniss Kozlovskis,20F,,,,20F,20F,20F,X,,20F,20F,20F,,,X,08F,08F,,20F,20F,,X,,,08F,20F,20F,,,20F,20F,,,15,0,3,12,84,96,180
+,41a475f9-aede-4568-8084-738ed7fc1099,Deniss Petraško,08F,08F,20F,20F,,,08F,,08F,08F,08F,,,,08F,20F,,08F,,,,08F,,08F,20F,,,,08F,,,,,14,0,10,4,136,32,168
+,2947e6b7-8696-4198-9ba3-cc554bf133df,Imants Mihails Burims,s08F,s,s,s,s08F,s08F,sX,s08F,s08F,s,s20F,s,s,sX,s08F,s20F,s20F,s,s,s08F,s08F,sX,s,s08F,20F,20F,,,,,08F,,,3,0,1,2,20,16,36
+,6ab4c769-9837-4010-b9a8-23a415f4534d,Jevgenijs Žarkevičs,20F,20F,20F,20F,,X,X,X,20F,,20F!,20F,20F,20F,,,20F,20F,20F,,,20F,20F,,,,20F,20F,20F,,,,,16,1,0,16,64,128,192
+,f605e6cb-04c8-4441-925c-56f32c420e68,Kirils Kuzņecovs,08F,20F,,,,X,08F,20F,20F,,,08F,08F,,,08F,08F,20F,,,08F,08F,08F,,,08F,08F,08F,,,,,,15,0,11,4,148,32,180
+,983f6298-63a5-4233-b98f-115730c6adad,Maksims Iznovs,20F!,20F,20F,,,20F,20F,20F,,,,20F,20F,20F,20F,20F!,20F!,,,20F,20F,20F,20F,,,20F,20F,20F,,,20F,,,19,2,0,19,76,152,228
+,cc60898a-d716-4a24-a5ef-02fbf5fa32a9,Sergejs Ivanovs,08F,08F,,,,20F,20F,20F,,,,,08F,08F,20F,,,20F,20F,20F,,,,,08F,08F,20F,,,,08F,,,14,0,6,8,104,64,168
+,297c99e7-0c18-4e46-b9f9-089131193896,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+,55f4cd97-39a8-461c-85a0-4a6e46933662,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+,b7a88702-07ab-47a3-b79b-38411177134a,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+,0a8487e5-fc80-4161-bad6-57b0b20711ff,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+,3f5d9986-16bb-4fad-aa2b-831259c7063b,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+,09e3dc58-aba1-4407-9b57-de10e16626c4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+,70cc9d95-be95-4f12-aa7a-1433fd0dd483,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+,03369aff-27f7-46bb-b636-0f721d5c29ba,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
+,c044eb83-1ff5-46a3-b01f-461e3c9dcf76,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0,0,0,0,0,0
